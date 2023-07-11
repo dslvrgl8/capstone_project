@@ -1,0 +1,142 @@
+{% extends 'base.html' %} 
+{% block content %}
+<div class="detail__img">
+    <img src="{{character.img}}" alt="{{character.name}}" />
+</div>
+<div class="detail__name">
+    {% if character.current_campaign %}
+    <div class="icon-text">
+        <span class="icon has-text-info">
+            <i class="fas fa-check-circle"></i>
+        </span>
+        <span>Playing</span>
+    </div>
+    {% endif %}
+    <h1 class="title">{{character.name}}</h1>
+</div>
+<div class="detail__container">
+    <div class="buttons">
+        <a href="{% url 'character_update' character.pk %}" class="button is-info"> Updates
+            <span class="icon">
+                <i class="fas fa-edit"></i>
+            </span>
+        </a>
+        <a href="{% url 'character_delete' character.pk %}" class="button is-danger">Delete
+            <span class="icon">
+                <i class="fas fa-trash-alt"></i>
+            </span>
+        </a>
+    </div>
+    <!-- inside container -->
+    <div class="detail__gears mb-5">
+        <h3 class="title is-3">Gear</h3>
+      
+        <nav class="panel">
+          <p class="panel-heading">
+            {{character.name}}
+          </p>
+          <!-- <div class="panel-block">
+            <p class="control has-icons-left">
+              <input class="input" type="text" placeholder="Search">
+              <span class="icon is-left">
+                <i class="fas fa-search" aria-hidden="true"></i>
+              </span>
+            </p>
+          </div> -->
+          <p class="panel-tabs">
+            <a class="is-active">All</a>
+            <a>Weapons</a>
+            <a>Spells</a>
+            <a>Money</a>
+            <a>Equipment</a>
+            <a>Class Ability</a>
+            <a>Hit Dice</a>
+            <a>Known Languages</a>
+          </p>
+          {% for gear in character.gears.all %}
+            <a id="{{ gear.weapon }}" class="panel-block gear-item weapons" style="display: none;">
+                <span class="panel-icon">
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                </span>
+                {{ gear.weapon }}
+            </a>
+            <a id="{{ gear.spell }}" class="panel-block gear-item spells" style="display: none;">
+                <span class="panel-icon">
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                </span>
+                {{ gear.spell }}
+            </a>
+            <a id="{{gear.money}}" class="panel-block gear-item money" style="display: none;">
+              <span class="panel-icon">
+                <i class="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {{gear.money}}
+            </a>
+            <a id="{{gear.equipment}}" class="panel-block gear-item equipment" style="display: none;">
+              <span class="panel-icon">
+                <i class="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {{gear.equipment}}
+            </a>
+            <a id="{{gear.class_ability}}" class="panel-block gear-item class_ability" style="display: none;">
+                <span class="panel-icon">
+                  <i class="fas fa-book" aria-hidden="true"></i>
+                </span>
+                {{gear.class_ability}}
+              </a>
+              <a id="{{gear.hit_dice}}" class="panel-block gear-item hit_dice" style="display: none;">
+                <span class="panel-icon">
+                  <i class="fas fa-book" aria-hidden="true"></i>
+                </span>
+                {{gear.hit_dice}}
+              </a>
+              <a id="{{gear.language}}" class="panel-block gear-item known_languages" style="display: none;">
+                <span class="panel-icon">
+                  <i class="fas fa-book" aria-hidden="true"></i>
+                </span>
+                {{gear.language}}
+              </a>
+          {% empty %}
+            <article class="message">
+              <div class="message-header">
+                <p>No Gear Available</p>
+              </div>
+            </article>
+          {% endfor %}
+          <label class="panel-block">
+            <input type="checkbox">
+            remember me
+          </label>
+          <div class="panel-block">
+            <button class="button is-link is-outlined is-fullwidth">
+              Reset all filters
+            </button>
+          </div>
+        </nav>
+      </div>
+
+ 
+<!--  above about section  -->
+    <div class="detail__about">
+        <h4 class="title is-4">About</h4>
+        <p>Race: {{character.race}}</p>
+        <p>Character Class/Level-- {{character.class_level}}</p>
+        <p>Character Alignment -- {{character.alignment}}</p>
+        <p>Strength -- {{character.strength}}</p>
+        <p>Dexterity -- {{character.dexterity}}</p>
+        <p>Constitution -- {{character.constitution}}</p>
+        <p>Intelligence -- {{character.intelligence}}</p>
+        <p>Wisdom -- {{character.wisdom}}</p>
+        <p>Charisma -- {{character.charisma}}</p>
+        <p>AC -- {{character.armor_class}}</p>
+        <p>Initiative -- {{character.initiative}}</p>
+        <p>Speed -- {{character.speed}}</p>
+        <p>HP -- {{character.hitpoints}}</p>
+        <p>Bio -- {{character.bio}}</p>
+        <p>Appearance -- {{character.appearance}}</p>
+        <p> Backstory -- {{character.backstory}}</p>
+        <p>Currently in a Campaign? -- {{character.current_campaign}}</p>
+    </div>
+</div>
+
+{% endblock %}
