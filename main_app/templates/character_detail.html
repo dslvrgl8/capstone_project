@@ -27,10 +27,18 @@
             </span>
         </a>
     </div>
-
-    <!-- stats go here -->
-  
+    <a class="button is-dark" href="{% url 'gear_create' character.pk %}">Add Gear</a>
+    <a href="{% url 'gear_update' character.pk %}" class="button is-info"> Gear Update
+      <span class="icon">
+          <i class="fas fa-edit"></i>
+      </span>
+  </a>
+  <div>{% for gear in character.gears.all %}
+      <h2>{{gear.weapon}}</h2>
+      {% endfor %}
+  </div>
     <!-- inside container -->
+
     <div class="detail__gears mb-5">
         <h3 class="title is-3">Gear</h3>
   

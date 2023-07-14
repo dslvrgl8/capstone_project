@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from django.shortcuts import render
 
 # Create your views here.
@@ -65,6 +66,11 @@ class CharacterCreate(CreateView):
 class CharacterDetail(DetailView):
     model = Character
     template_name = "character_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['gear'] = Gear.objects.all()
+        return context
         
 class CharacterUpdate(UpdateView):
     model = Character
