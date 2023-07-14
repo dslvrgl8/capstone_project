@@ -63,3 +63,10 @@ class Gear(models.Model):
 
     def __str__(self):
         return str(self.character)
+    
+class Campaign(models.Model):
+    title = models.CharField(max_length=150)
+    characters = models.ManyToManyField(Character)
+
+    def __str__(self):
+        return self.title

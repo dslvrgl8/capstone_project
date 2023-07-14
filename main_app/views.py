@@ -13,7 +13,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # after our other imports 
 from django.views.generic import DetailView
 # import models
-from .models import Character, Gear
+from .models import Character, Gear, Campaign
 
 from django.urls import reverse
 
@@ -22,6 +22,11 @@ from django.urls import reverse
 # Here we will be creating a class called Home and extending it from the View class
 class Home(TemplateView):
     template_name = "home.html"
+    # Here we have added the playlists as context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["campaigns"] = Campaign.objects.all()
+        return context
 
 # class Character:
 #     def __init__(self, name, image, character_class):
@@ -74,21 +79,68 @@ class CharacterDelete(DeleteView):
     template_name = "character_delete_confirmation.html"
     success_url = "/characters/"
 
-class GearCreate(View):
 
-    def post(self, request, pk):
-        acrobatics_dex = request.POST.get("acrobatics")
-        animal_handling_wis = request.POST.get("animal handling")
-        arcana_int = request.POST.get("arcana")
-        athletics_str = request.POST.get("strength")
-        deception_cha = request.POST.get("deception")
-        history_int = request.POST.get("history")
-        insight_wis = request.POST.get("insight")
-        intimidation_cha = request.POST.get("intimidation")
-        investigation_int = request.POST.get("investigation")
-        medicine_wis = request.POST.get("medicine")
-        insight_wis = request.POST.get("insight")
-        intimidation_cha = request.POST.get("intimidation")
-        character = Character.objects.get(pk=pk)
-        Gear.objects.create(title=title, length=length, character=character)
-        return redirect('character_detail', pk=pk)
+class GearCreate(CreateView):
+    model = Gear
+    fields = ['weapon', 'spell', 'money', 'equipment', 'class_ability', 'hit_dice', 'language', 'acrobatics_dex', 'animal_handling_wis', 'arcana_int', 'athletics_str', 'deception_cha', 'history_int', 'insight_wis', 'intimidation_cha', 'investigation_int', 'medicine_wis', 'nature_int', 'perception_wis', 'performance_cha', 'persuasion_cha', 'persuasion_cha', 'religion_int', 'sleight_of_hand_dex', 'stealth_dex', 'survival_wis']
+    template_name = "gear_create.html"
+    # this will get the pk from the route and redirect to artist view
+    def get_success_url(self):
+        return reverse('character_detail', kwargs={'pk': self.object.pk})
+    
+class GearUpdate(UpdateView):
+    model = Gear
+    fields = ['weapon', 'spell', 'money', 'equipment', 'class_ability', 'hit_dice', 'language', 'acrobatics_dex', 'animal_handling_wis', 'arcana_int', 'athletics_str', 'deception_cha', 'history_int', 'insight_wis', 'intimidation_cha', 'investigation_int', 'medicine_wis', 'nature_int', 'perception_wis', 'performance_cha', 'persuasion_cha', 'persuasion_cha', 'religion_int', 'sleight_of_hand_dex', 'stealth_dex', 'survival_wis']
+    template_name = "gear_update.html"
+    # this will get the pk from the route and redirect to artist view
+    def get_success_url(self):
+        return reverse('character_detail', kwargs={'pk': self.object.pk})
+    
+
+class CampaignCharacterAssoc(View):
+
+    def get(self, request, pk, character_pk):
+        # get the query param from the url
+        assoc = request.GET.get("assoc")
+        if assoc == "remove":
+            # get the playlist by the id and
+            # remove from the join table the given song_id
+            Campaign.objects.get(pk=pk).characters.remove(character_pk)
+        if assoc == "add":
+            # get the playlist by the id and
+            # add to the join table the given song_id
+            Campaign.objects.get(pk=pk).characters.add(character_pk)
+        return redirect('home')
+
+
+# class GearCreate(View):
+
+#     def post(self, request, pk):
+#         weapon = request.POST.get("weapon")
+#         spell = request.POST.get("spell")
+#         money = request.POST.get("money")
+#         equipment = request.POST.get("equipment")
+#         class_ability = request.POST.get("class_ability")
+#         hit_dice = request.POST.get("hit_dice")
+#         language = request.POST.get("language")
+#         acrobatics_dex = request.POST.get("acrobatics")
+#         animal_handling_wis = request.POST.get("animal_handling")
+#         arcana_int = request.POST.get("arcana")
+#         athletics_str = request.POST.get("strength")
+#         deception_cha = request.POST.get("deception")
+#         history_int = request.POST.get("history")
+#         insight_wis = request.POST.get("insight")
+#         intimidation_cha = request.POST.get("intimidation")
+#         investigation_int = request.POST.get("investigation")
+#         medicine_wis = request.POST.get("medicine")
+#         nature_int = request.POST.get("nature")
+#         perception_wis = request.POST.get("perception")
+#         performance_cha = request.POST.get("performance]")
+#         persuasion_cha = request.POST.get("persuasion")
+#         religion_int = request.POST.get("religion")
+#         sleight_of_hand_dex = request.POST.get("slight_of_hand")
+#         stealth_dex = request.POST.get("stealth")
+#         survival_wis = request.POST.get("survival")
+#         character = Character.objects.get(pk=pk)
+#         Gear.objects.create(weapon=weapon, spell=spell, money=money, equipment=equipment, class_ability=class_ability, hit_dice=hit_dice, language=language, acrobatics_dex=acrobatics_dex, animal_handling_wis=animal_handling_wis, arcana_int=arcana_int, athletics_str=athletics_str, deception_cha=deception_cha, history_int=history_int, insight_wis=insight_wis, intimidation_cha=intimidation_cha, investigation_int=investigation_int, medicine_wis=medicine_wis, nature_int=nature_int, perception_wis=perception_wis, performance_cha=performance_cha, persuasion_cha=persuasion_cha, religion_int=religion_int, sleight_of_hand_dex=sleight_of_hand_dex, stealth_dex=stealth_dex, survival_wis=survival_wis, character=character)
+#         return redirect('character_detail', pk=pk)
