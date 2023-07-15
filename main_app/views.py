@@ -18,6 +18,8 @@ from .models import Character, Gear, Campaign
 
 from django.urls import reverse
 
+from django.shortcuts import get_object_or_404
+
 # Create your views here.
 
 # Here we will be creating a class called Home and extending it from the View class
@@ -51,6 +53,7 @@ class CharacterList(TemplateView):
             context["header"] = f"Searching for {name}"
         else:
             context["characters"] = Character.objects.all()
+            context["gears"] = Gear.objects.all()
             # default header for not searching 
             context["header"] = "All Characters"
         return context
@@ -91,8 +94,15 @@ class GearCreate(CreateView):
     fields = ['weapon', 'spell', 'money', 'equipment', 'class_ability', 'hit_dice', 'language', 'acrobatics_dex', 'animal_handling_wis', 'arcana_int', 'athletics_str', 'deception_cha', 'history_int', 'insight_wis', 'intimidation_cha', 'investigation_int', 'medicine_wis', 'nature_int', 'perception_wis', 'performance_cha', 'persuasion_cha', 'persuasion_cha', 'religion_int', 'sleight_of_hand_dex', 'stealth_dex', 'survival_wis']
     template_name = "gear_create.html"
     # this will get the pk from the route and redirect to artist view
+    
+    def form_valid(self, form):
+        character_pk = self.kwargs['pk']
+        character = get_object_or_404(Character, pk=character_pk)
+        form.instance.character = character
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse('character_detail', kwargs={'pk': self.object.pk})
+        return reverse('character_update', kwargs={'pk': self.object.pk})
     
 class GearUpdate(UpdateView):
     model = Gear

@@ -33,8 +33,8 @@
           <i class="fas fa-edit"></i>
       </span>
   </a>
-  <div>{% for gear in character.gears.all %}
-      <h2>{{gear.weapon}}</h2>
+  <div>{% for item in gear %}
+      <h2>{{item.weapon}}</h2>
       {% endfor %}
   </div>
     <!-- inside container -->
@@ -45,7 +45,7 @@
       
         <nav class="panel">
           <p class="panel-heading">
-            {{character.name}}
+            {{item.character.name}}
           </p>
           <!-- <div class="panel-block">
             <p class="control has-icons-left">
@@ -65,48 +65,48 @@
             <a>Hit Dice</a>
             <a>Known Languages</a>
           </p>
-          {% for gear in character.gears.all %}
-            <a id="{{ gear.weapon }}" class="panel-block gear-item weapons" style="display: none;">
+          {% for item in gear %}
+            <a id="{{ item.weapon }}" class="panel-block gear-item weapons" style="display: none;">
                 <span class="panel-icon">
                     <i class="fas fa-book" aria-hidden="true"></i>
                 </span>
-                {{ gear.weapon }}
+                {{ item.weapon }}
             </a>
-            <a id="{{ gear.spell }}" class="panel-block gear-item spells" style="display: none;">
+            <a id="{{ item.spell }}" class="panel-block gear-item spells" style="display: none;">
                 <span class="panel-icon">
                     <i class="fas fa-book" aria-hidden="true"></i>
                 </span>
-                {{ gear.spell }}
+                {{ item.spell }}
             </a>
-            <a id="{{gear.money}}" class="panel-block gear-item money" style="display: none;">
+            <a id="{{item.money}}" class="panel-block gear-item money" style="display: none;">
               <span class="panel-icon">
                 <i class="fas fa-book" aria-hidden="true"></i>
               </span>
-              {{gear.money}}
+              {{item.money}}
             </a>
-            <a id="{{gear.equipment}}" class="panel-block gear-item equipment" style="display: none;">
+            <a id="{{item.equipment}}" class="panel-block gear-item equipment" style="display: none;">
               <span class="panel-icon">
                 <i class="fas fa-book" aria-hidden="true"></i>
               </span>
-              {{gear.equipment}}
+              {{item.equipment}}
             </a>
-            <a id="{{gear.class_ability}}" class="panel-block gear-item class_ability" style="display: none;">
+            <a id="{{item.class_ability}}" class="panel-block gear-item class_ability" style="display: none;">
                 <span class="panel-icon">
                   <i class="fas fa-book" aria-hidden="true"></i>
                 </span>
-                {{gear.class_ability}}
+                {{item.class_ability}}
               </a>
-              <a id="{{gear.hit_dice}}" class="panel-block gear-item hit_dice" style="display: none;">
+              <a id="{{item.hit_dice}}" class="panel-block gear-item hit_dice" style="display: none;">
                 <span class="panel-icon">
                   <i class="fas fa-book" aria-hidden="true"></i>
                 </span>
-                {{gear.hit_dice}}
+                {{item.hit_dice}}
               </a>
-              <a id="{{gear.language}}" class="panel-block gear-item known_languages" style="display: none;">
+              <a id="{{item.language}}" class="panel-block gear-item known_languages" style="display: none;">
                 <span class="panel-icon">
                   <i class="fas fa-book" aria-hidden="true"></i>
                 </span>
-                {{gear.language}}
+                {{item.language}}
               </a>
           {% empty %}
             <article class="message">

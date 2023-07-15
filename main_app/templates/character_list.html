@@ -17,7 +17,7 @@
   <a class="button is-dark" href="{% url 'character_create' %}">Add Character</a>
 </form>
 <div class="gallery">
-  {% for character in characters %}
+  {% for character in gear.characters.all %}
   <a href="{% url 'character_detail' character.pk %}">
     <div class="card">
       <div class="card-image">
