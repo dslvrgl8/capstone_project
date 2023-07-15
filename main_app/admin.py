@@ -8,3 +8,4 @@ from .models import Character, Gear, Campaign # import the Artist model from mod
 admin.site.register(Character) # this line will add the model to the admin panel
 admin.site.register(Gear)
 admin.site.register(Campaign)
+# admin.site.register(Stat)

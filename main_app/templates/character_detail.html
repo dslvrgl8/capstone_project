@@ -28,13 +28,15 @@
         </a>
     </div>
     <a class="button is-dark" href="{% url 'gear_create' character.pk %}">Add Gear</a>
-    <a href="{% url 'gear_update' character.pk %}" class="button is-info"> Gear Update
+    {% for g in gear %}
+
+{% endfor %}
       <span class="icon">
           <i class="fas fa-edit"></i>
       </span>
   </a>
   <div>{% for item in gear %}
-      <h2>{{item.weapon}}</h2>
+      <h2>Acrobatics: +{{item.acrobatics_dex}} 🐉 Animal Handling: +{{item.animal_handling_wis}} 🐉 Arcana: +{{item.arcana_int}} 🐉 Athletics: +{{item.athletics_str}} 🐉 Deception: +{{item.deception_cha}} 🐉 History: +{{item.history_int}} 🐉 Insight: +{{item.insight_wis}} 🐉 Intimidation: +{{item.intimidation_cha}} 🐉 Investigation: +{{item.investigation_int}} 🐉 Medicine: +{{item.medicine_wis}} 🐉 Nature: +{{item.nature_int}} 🐉 Perception: +{{item.perception_wis}} 🐉 Performance: +{{item.performance_cha}} 🐉 Persuasion: +{{item.persuasion_cha}} 🐉 Religion: +{{item.religion_int}} 🐉 Sleight of Hand: +{{item.sleight_of_hand_dex}} 🐉 Stealth: +{{item.stealth_dex}} 🐉 Survival: +{{item.survival_wis}}</h2>
       {% endfor %}
   </div>
     <!-- inside container -->

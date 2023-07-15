@@ -72,7 +72,7 @@ class CharacterDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['gear'] = Gear.objects.all()
+        context['gear'] = self.object.gears.all()
         return context
         
 class CharacterUpdate(UpdateView):
@@ -127,36 +127,3 @@ class CampaignCharacterAssoc(View):
             # add to the join table the given song_id
             Campaign.objects.get(pk=pk).characters.add(character_pk)
         return redirect('home')
-
-
-# class GearCreate(View):
-
-#     def post(self, request, pk):
-#         weapon = request.POST.get("weapon")
-#         spell = request.POST.get("spell")
-#         money = request.POST.get("money")
-#         equipment = request.POST.get("equipment")
-#         class_ability = request.POST.get("class_ability")
-#         hit_dice = request.POST.get("hit_dice")
-#         language = request.POST.get("language")
-#         acrobatics_dex = request.POST.get("acrobatics")
-#         animal_handling_wis = request.POST.get("animal_handling")
-#         arcana_int = request.POST.get("arcana")
-#         athletics_str = request.POST.get("strength")
-#         deception_cha = request.POST.get("deception")
-#         history_int = request.POST.get("history")
-#         insight_wis = request.POST.get("insight")
-#         intimidation_cha = request.POST.get("intimidation")
-#         investigation_int = request.POST.get("investigation")
-#         medicine_wis = request.POST.get("medicine")
-#         nature_int = request.POST.get("nature")
-#         perception_wis = request.POST.get("perception")
-#         performance_cha = request.POST.get("performance]")
-#         persuasion_cha = request.POST.get("persuasion")
-#         religion_int = request.POST.get("religion")
-#         sleight_of_hand_dex = request.POST.get("slight_of_hand")
-#         stealth_dex = request.POST.get("stealth")
-#         survival_wis = request.POST.get("survival")
-#         character = Character.objects.get(pk=pk)
-#         Gear.objects.create(weapon=weapon, spell=spell, money=money, equipment=equipment, class_ability=class_ability, hit_dice=hit_dice, language=language, acrobatics_dex=acrobatics_dex, animal_handling_wis=animal_handling_wis, arcana_int=arcana_int, athletics_str=athletics_str, deception_cha=deception_cha, history_int=history_int, insight_wis=insight_wis, intimidation_cha=intimidation_cha, investigation_int=investigation_int, medicine_wis=medicine_wis, nature_int=nature_int, perception_wis=perception_wis, performance_cha=performance_cha, persuasion_cha=persuasion_cha, religion_int=religion_int, sleight_of_hand_dex=sleight_of_hand_dex, stealth_dex=stealth_dex, survival_wis=survival_wis, character=character)
-#         return redirect('character_detail', pk=pk)
