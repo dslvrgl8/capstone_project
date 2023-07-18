@@ -1,14 +1,14 @@
-{% extends 'base.html' %} 
-{% block content %}
-<h1>Add Gear</h1>
-
 <form method="post">
-<!-- Security Feature  -->
-  {% csrf_token %} 
-<!--  Generate inputs  -->
-  {{form.as_p}} 
-<!--  Submit form  -->
-  <input type="submit" value="Submit" />
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="field">
+      <label class="label">{{ field.label_tag }}</label>
+      <div class="control">
+        {{ field }}
+      </div>
+    </div>
+    <input type="text" style="display:none">
+  {% endfor %}
+  <button type="submit" class="button is-info">Create Gear</button>
 </form>
 
-{% endblock %}

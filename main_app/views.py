@@ -19,6 +19,7 @@ from .models import Character, Gear, Campaign
 from django.urls import reverse
 
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
@@ -56,6 +57,8 @@ class CharacterList(TemplateView):
             context["gears"] = Gear.objects.all()
             # default header for not searching 
             context["header"] = "All Characters"
+            context["campaigns"] = Campaign.objects.all()
+        
         return context
 
 class CharacterCreate(CreateView):
@@ -96,21 +99,25 @@ class GearCreate(CreateView):
     # this will get the pk from the route and redirect to artist view
     
     def form_valid(self, form):
-        character_pk = self.kwargs['pk']
-        character = get_object_or_404(Character, pk=character_pk)
-        form.instance.character = character
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('character_update', kwargs={'pk': self.object.pk})
+        # Exclude fields that are blank before saving the instance
+        instance = form.save(commit=False)
+        instance.character = Character.objects.get(pk=self.kwargs['pk'])
+        instance.save()
+        return HttpResponseRedirect(reverse('character_detail', kwargs={'pk': self.kwargs['pk']}))
     
-class GearUpdate(UpdateView):
-    model = Gear
-    fields = ['weapon', 'spell', 'money', 'equipment', 'class_ability', 'hit_dice', 'language', 'acrobatics_dex', 'animal_handling_wis', 'arcana_int', 'athletics_str', 'deception_cha', 'history_int', 'insight_wis', 'intimidation_cha', 'investigation_int', 'medicine_wis', 'nature_int', 'perception_wis', 'performance_cha', 'persuasion_cha', 'persuasion_cha', 'religion_int', 'sleight_of_hand_dex', 'stealth_dex', 'survival_wis']
-    template_name = "gear_update.html"
-    # this will get the pk from the route and redirect to artist view
     def get_success_url(self):
-        return reverse('character_detail', kwargs={'pk': self.object.pk})
+            # Get the character's primary key (pk) from the form data
+            character_pk = self.object.character.pk
+            # Redirect to the character_detail view for the specific character
+            return reverse('character_detail', kwargs={'pk': character_pk})
+        
+# class GearUpdate(UpdateView):
+#     model = Gear
+#     fields = ['weapon', 'spell', 'money', 'equipment', 'class_ability', 'hit_dice', 'language', 'acrobatics_dex', 'animal_handling_wis', 'arcana_int', 'athletics_str', 'deception_cha', 'history_int', 'insight_wis', 'intimidation_cha', 'investigation_int', 'medicine_wis', 'nature_int', 'perception_wis', 'performance_cha', 'persuasion_cha', 'persuasion_cha', 'religion_int', 'sleight_of_hand_dex', 'stealth_dex', 'survival_wis']
+#     template_name = "gear_update.html"
+#     # this will get the pk from the route and redirect to artist view
+#     def get_success_url(self):
+#         return reverse('character_detail', kwargs={'pk': self.object.pk})
     
 
 class CampaignCharacterAssoc(View):

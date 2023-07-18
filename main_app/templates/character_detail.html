@@ -35,10 +35,33 @@
           <i class="fas fa-edit"></i>
       </span>
   </a>
-  <div>{% for item in gear %}
-      <h2>Acrobatics: +{{item.acrobatics_dex}} 🐉 Animal Handling: +{{item.animal_handling_wis}} 🐉 Arcana: +{{item.arcana_int}} 🐉 Athletics: +{{item.athletics_str}} 🐉 Deception: +{{item.deception_cha}} 🐉 History: +{{item.history_int}} 🐉 Insight: +{{item.insight_wis}} 🐉 Intimidation: +{{item.intimidation_cha}} 🐉 Investigation: +{{item.investigation_int}} 🐉 Medicine: +{{item.medicine_wis}} 🐉 Nature: +{{item.nature_int}} 🐉 Perception: +{{item.perception_wis}} 🐉 Performance: +{{item.performance_cha}} 🐉 Persuasion: +{{item.persuasion_cha}} 🐉 Religion: +{{item.religion_int}} 🐉 Sleight of Hand: +{{item.sleight_of_hand_dex}} 🐉 Stealth: +{{item.stealth_dex}} 🐉 Survival: +{{item.survival_wis}}</h2>
-      {% endfor %}
-  </div>
+  <div>
+    {% for item in gear %}
+        {% if item.acrobatics_dex or item.animal_handling_wis or item.arcana_int or item.athletics_str or item.deception_cha or item.history_int or item.insight_wis or item.intimidation_cha or item.investigation_int or item.medicine_wis or item.nature_int or item.perception_wis or item.performance_cha or item.persuasion_cha or item.religion_int or item.sleight_of_hand_dex or item.stealth_dex or item.survival_wis %}
+            <h2>
+                {% if item.acrobatics_dex %} Acrobatics: +{{ item.acrobatics_dex }} 🐉 {% endif %}
+                {% if item.animal_handling_wis %} Animal Handling: +{{ item.animal_handling_wis }} 🐉 {% endif %}
+                {% if item.arcana_int %} Arcana: +{{ item.arcana_int }} 🐉 {% endif %}
+                {% if item.athletics_str %} Athletics: +{{ item.athletics_str }} 🐉 {% endif %}
+                {% if item.deception_cha %} Deception: +{{ item.deception_cha }} 🐉 {% endif %}
+                {% if item.history_int %} History: +{{ item.history_int }} 🐉 {% endif %}
+                {% if item.insight_wis %} Insight: +{{ item.insight_wis }} 🐉 {% endif %}
+                {% if item.intimidation_cha %} Intimidation: +{{ item.intimidation_cha }} 🐉 {% endif %}
+                {% if item.investigation_int %} Investigation: +{{ item.investigation_int }} 🐉 {% endif %}
+                {% if item.medicine_wis %} Medicine: +{{ item.medicine_wis }} 🐉 {% endif %}
+                {% if item.nature_int %} Nature: +{{ item.nature_int }} 🐉 {% endif %}
+                {% if item.perception_wis %} Perception: +{{ item.perception_wis }} 🐉 {% endif %}
+                {% if item.performance_cha %} Performance: +{{ item.performance_cha }} 🐉 {% endif %}
+                {% if item.persuasion_cha %} Persuasion: +{{ item.persuasion_cha }} 🐉 {% endif %}
+                {% if item.religion_int %} Religion: +{{ item.religion_int }} 🐉 {% endif %}
+                {% if item.sleight_of_hand_dex %} Sleight of Hand: +{{ item.sleight_of_hand_dex }} 🐉 {% endif %}
+                {% if item.stealth_dex %} Stealth: +{{ item.stealth_dex }} 🐉 {% endif %}
+                {% if item.survival_wis %} Survival: +{{ item.survival_wis }} 🐉 {% endif %}
+            </h2>
+        {% endif %}
+    {% endfor %}
+</div>
+
     <!-- inside container -->
 
     <div class="detail__gears mb-5">
@@ -68,49 +91,63 @@
             <a>Known Languages</a>
           </p>
           {% for item in gear %}
-            <a id="{{ item.weapon }}" class="panel-block gear-item weapons" style="display: none;">
-                <span class="panel-icon">
-                    <i class="fas fa-book" aria-hidden="true"></i>
-                </span>
-                {{ item.weapon }}
-            </a>
-            <a id="{{ item.spell }}" class="panel-block gear-item spells" style="display: none;">
-                <span class="panel-icon">
-                    <i class="fas fa-book" aria-hidden="true"></i>
-                </span>
-                {{ item.spell }}
-            </a>
-            <a id="{{item.money}}" class="panel-block gear-item money" style="display: none;">
+          {% if item.weapon %}
+          <a id="{{ item.weapon }}" class="panel-block gear-item weapons" style="display: none;">
               <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
+                  <i class="fas fa-book" aria-hidden="true"></i>
               </span>
-              {{item.money}}
-            </a>
-            <a id="{{item.equipment}}" class="panel-block gear-item equipment" style="display: none;">
+              {{ item.weapon }}
+          </a>
+      {% endif %}
+      {% if item.spell %}
+          <a id="{{ item.spell }}" class="panel-block gear-item spells" style="display: none;">
               <span class="panel-icon">
-                <i class="fas fa-book" aria-hidden="true"></i>
+                  <i class="fas fa-book" aria-hidden="true"></i>
               </span>
-              {{item.equipment}}
-            </a>
-            <a id="{{item.class_ability}}" class="panel-block gear-item class_ability" style="display: none;">
-                <span class="panel-icon">
+              {{ item.spell }}
+          </a>
+      {% endif %}
+      {% if item.money %}
+          <a id="{{ item.money }}" class="panel-block gear-item money" style="display: none;">
+              <span class="panel-icon">
                   <i class="fas fa-book" aria-hidden="true"></i>
-                </span>
-                {{item.class_ability}}
-              </a>
-              <a id="{{item.hit_dice}}" class="panel-block gear-item hit_dice" style="display: none;">
-                <span class="panel-icon">
+              </span>
+              {{ item.money }}
+          </a>
+      {% endif %}
+      {% if item.equipment %}
+          <a id="{{ item.equipment }}" class="panel-block gear-item equipment" style="display: none;">
+              <span class="panel-icon">
                   <i class="fas fa-book" aria-hidden="true"></i>
-                </span>
-                {{item.hit_dice}}
-              </a>
-              <a id="{{item.language}}" class="panel-block gear-item known_languages" style="display: none;">
-                <span class="panel-icon">
+              </span>
+              {{ item.equipment }}
+          </a>
+      {% endif %}
+      {% if item.class_ability %}
+          <a id="{{ item.class_ability }}" class="panel-block gear-item class_ability" style="display: none;">
+              <span class="panel-icon">
                   <i class="fas fa-book" aria-hidden="true"></i>
-                </span>
-                {{item.language}}
-              </a>
-          {% empty %}
+              </span>
+              {{ item.class_ability }}
+          </a>
+      {% endif %}
+      {% if item.hit_dice %}
+          <a id="{{ item.hit_dice }}" class="panel-block gear-item hit_dice" style="display: none;">
+              <span class="panel-icon">
+                  <i class="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {{ item.hit_dice }}
+          </a>
+      {% endif %}
+      {% if item.language %}
+          <a id="{{ item.language }}" class="panel-block gear-item known_languages" style="display: none;">
+              <span class="panel-icon">
+                  <i class="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {{ item.language }}
+          </a>
+      {% endif %}
+  {% empty %}
             <article class="message">
               <div class="message-header">
                 <p>No Gear Available</p>

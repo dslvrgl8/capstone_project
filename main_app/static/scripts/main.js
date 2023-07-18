@@ -46,3 +46,7 @@ $(".navbar-burger").click(function () {
     // Show all gear items
     $('.gear-item').show();
   });
+
+  $(".dropdown").click(function (event) {
+    $(this).toggleClass("is-active");
+  });
