@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 {% block content %}
 <div class="detail__img">
     <img src="{{character.img}}" alt="{{character.name}}" />
@@ -28,6 +28,11 @@
         </a>
     </div>
     <a class="button is-dark" href="{% url 'gear_create' character.pk %}">Add Gear</a>
+    <form method="post" action="{% url 'add_character_to_campaign' character.pk %}">
+      {% csrf_token %}
+      {{ campaign_form.as_p }}
+      <button type="submit" class="button is-success">Add Character to Campaign</button>
+  </form>
     {% for g in gear %}
 
 {% endfor %}
@@ -191,7 +196,13 @@
         <p>Appearance -- {{character.appearance}}</p>
         <p> Backstory -- {{character.backstory}}</p>
         <p>Currently in a Campaign? -- {{character.current_campaign}}</p>
+        <div>
+          {% for campaign in campaigns %}
+          <a href="{% url 'add_character_to_campaign' campaign.pk %}?character_pk={{ character.pk }}&assoc=add" class="dropdown-item">{{ campaign.title }}</a>
+          {% endfor %}
+      </div>
     </div>
+    
 </div>
 
 {% endblock %}

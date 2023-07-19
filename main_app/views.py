@@ -20,17 +20,30 @@ from django.urls import reverse
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from .forms import CampaignCharacterForm
 
 # Create your views here.
 
 # Here we will be creating a class called Home and extending it from the View class
 class Home(TemplateView):
     template_name = "home.html"
-    # Here we have added the playlists as context
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["campaigns"] = Campaign.objects.all()
+
+        # Get the selected campaign if it's present in the URL parameters
+        campaign_pk = self.request.GET.get("campaign")
+        if campaign_pk:
+            campaign = get_object_or_404(Campaign, pk=campaign_pk)
+            context["selected_campaign"] = campaign
+            # Get characters associated with the selected campaign
+            context["characters_in_campaign"] = campaign.characters.all()
+            # Get characters not associated with the selected campaign
+            context["characters_not_in_campaign"] = Character.objects.exclude(campaigns=campaign)
+
         return context
+
 
 # class Character:
 #     def __init__(self, name, image, character_class):
@@ -48,18 +61,22 @@ class CharacterList(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("name")
-        if name != None:
+        if name is not None:
             context["characters"] = Character.objects.filter(name__icontains=name)
-            # We add a header context that includes the search param
             context["header"] = f"Searching for {name}"
         else:
             context["characters"] = Character.objects.all()
             context["gears"] = Gear.objects.all()
-            # default header for not searching 
             context["header"] = "All Characters"
-            context["campaigns"] = Campaign.objects.all()
-        
+
+        all_characters = Character.objects.all()
+        characters_in_campaigns = Character.objects.filter(campaign__isnull=False)
+        characters_not_in_campaign = all_characters.exclude(pk__in=characters_in_campaigns)
+        context["characters_not_in_campaign"] = characters_not_in_campaign
+
         return context
+
+
 
 class CharacterCreate(CreateView):
     model = Character
@@ -76,7 +93,9 @@ class CharacterDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['gear'] = self.object.gears.all()
+        context['campaign_form'] = CampaignCharacterForm()
         return context
+
         
 class CharacterUpdate(UpdateView):
     model = Character
@@ -110,27 +129,31 @@ class GearCreate(CreateView):
             character_pk = self.object.character.pk
             # Redirect to the character_detail view for the specific character
             return reverse('character_detail', kwargs={'pk': character_pk})
-        
-# class GearUpdate(UpdateView):
-#     model = Gear
-#     fields = ['weapon', 'spell', 'money', 'equipment', 'class_ability', 'hit_dice', 'language', 'acrobatics_dex', 'animal_handling_wis', 'arcana_int', 'athletics_str', 'deception_cha', 'history_int', 'insight_wis', 'intimidation_cha', 'investigation_int', 'medicine_wis', 'nature_int', 'perception_wis', 'performance_cha', 'persuasion_cha', 'persuasion_cha', 'religion_int', 'sleight_of_hand_dex', 'stealth_dex', 'survival_wis']
-#     template_name = "gear_update.html"
-#     # this will get the pk from the route and redirect to artist view
-#     def get_success_url(self):
-#         return reverse('character_detail', kwargs={'pk': self.object.pk})
-    
+
+
 
 class CampaignCharacterAssoc(View):
 
-    def get(self, request, pk, character_pk):
-        # get the query param from the url
-        assoc = request.GET.get("assoc")
-        if assoc == "remove":
-            # get the playlist by the id and
-            # remove from the join table the given song_id
-            Campaign.objects.get(pk=pk).characters.remove(character_pk)
-        if assoc == "add":
-            # get the playlist by the id and
-            # add to the join table the given song_id
-            Campaign.objects.get(pk=pk).characters.add(character_pk)
-        return redirect('home')
+    def post(self, request, *args, **kwargs):
+        form = CampaignCharacterForm(request.POST)
+        if form.is_valid():
+            character = form.cleaned_data['character']
+            campaign = form.cleaned_data['campaign']
+            campaign.characters.add(character)
+            return redirect("home")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+    def get(self, request, *args, **kwargs):
+        # Handle GET request if needed, currently, the form submission is via POST
+        return redirect("home")
+    
+def add_character_to_campaign(request, campaign_pk, character_pk):
+    campaign = get_object_or_404(Campaign, pk=campaign_pk)
+    character = get_object_or_404(Character, pk=character_pk)
+
+    # Assuming you have a "characters" ManyToMany field in your Campaign model
+    campaign.characters.add(character)
+
+    return HttpResponseRedirect(reverse('home'))
+
+

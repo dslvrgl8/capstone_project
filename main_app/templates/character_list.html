@@ -33,7 +33,7 @@
   {% endfor %}
 </div>
 
-{% for character in characters.campaign.all %}
+{% for character in character.campaigns.all %}
 <div class="character">
     <span>{{ forloop.counter }}</span>
     <span><b>{{ character.name }}</b></span>

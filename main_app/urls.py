@@ -9,5 +9,6 @@ urlpatterns = [
     path('characters/<int:pk>/update',views.CharacterUpdate.as_view(), name="character_update"),
     path('characters/<int:pk>/delete',views.CharacterDelete.as_view(), name="character_delete"),
     path('characters/<int:pk>/gear', views.GearCreate.as_view(), name="gear_create"),
+    path('campaign_character_assoc/<int:campaign_pk>/add/', views.CampaignCharacterAssoc.as_view(), name='add_character_to_campaign'),
     path('campaigns/<int:pk>/characters/<int:character_pk>/', views.CampaignCharacterAssoc.as_view(), name="campaign_character_assoc"),
 ]

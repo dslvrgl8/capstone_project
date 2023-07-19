@@ -47,6 +47,6 @@ $(".navbar-burger").click(function () {
     $('.gear-item').show();
   });
 
-  $(".dropdown").click(function (event) {
+$(".dropdown").click(function (event) {
     $(this).toggleClass("is-active");
   });
