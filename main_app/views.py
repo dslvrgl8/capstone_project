@@ -137,28 +137,18 @@ class GearCreate(CreateView):
 
 class CampaignCharacterAssoc(View):
 
-    def post(self, request, *args, **kwargs, ):
-        campaign = get_object_or_404(Campaign, pk=campaign_pk)
-        form = CampaignCharacterForm(request.POST)
-        if form.is_valid():
-            character = form.cleaned_data['character']
-            campaign = form.cleaned_data['campaign']
-            campaign.characters.add(character)
-            return redirect("home")
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-    def get(self, request, *args, **kwargs):
-        # Handle GET request if needed, currently, the form submission is via POST
-        return redirect("home")
-    
-def add_character_to_campaign(request, campaign_pk, character_pk):
-    campaign = get_object_or_404(Campaign, pk=campaign_pk)
-    character = get_object_or_404(Character, pk=character_pk)
-
-    # Assuming you have a "characters" ManyToMany field in your Campaign model
-    campaign.characters.add(character)
-
-    return HttpResponseRedirect(reverse('home'))
+    def get(self, request, campaign_pk, character_pk):
+        # get the query param from the url
+        assoc = request.GET.get("assoc")
+        if assoc == "remove":
+            # get the playlist by the id and
+            # remove from the join table the given song_id
+            Campaign.objects.get(pk=campaign_pk).characters.remove(character_pk)
+        if assoc == "add":
+            # get the playlist by the id and
+            # add to the join table the given song_id
+            Campaign.objects.get(pk=campaign_pk).characters.add(character_pk)
+        return redirect('home')
 
 
 def testFight(request):

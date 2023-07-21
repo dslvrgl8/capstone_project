@@ -29,28 +29,38 @@
     </div>
     <a class="button is-dark" href="{% url 'gear_create' character.pk %}">Add Gear</a>
    
-<!-- SPACE -->
-  <form class="centered" method = "post" action="{% url 'test_fight' %}">
-    {% csrf_token %}
-    <select name="selected_campaign" multiple>
-        {% for campaign in campaigns %}
-
-            <option value="{{campaign.id}}">{{campaign.name}}</option>
-            
-        {% endfor %}
-    </select>
-    <select value=“selected_character” style='display: none;' multiple>
-      <option value=“{{character.id}}” selected></option>
-      </select>
-    <input class="margin" type="submit" value="ADD" />
-  
-
-</form>
-
       <span class="icon">
           <i class="fas fa-edit"></i>
       </span>
   </a>
+  <div class="campaign">
+    <span>{{forloop.counter}}</span>
+    <span><b>{{campaign.title}}</b></span>
+    <span>
+        <div class="dropdown">
+            <div class="dropdown-trigger">
+                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <span>Add to Campaign</span>
+                    <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                    {% for campaign in campaigns %}
+                    <a href="{% url 'campaign_character_assoc' campaign.pk character.pk %}?assoc=add" class="dropdown-item">{{ campaign.title }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </span>
+</div>
+  <!-- <div>
+    {% for campaign in campaigns %}
+    <a href="{% url 'add_character_to_campaign' campaign.pk %}?character_pk={{ character.pk }}&assoc=add" class="dropdown-item">{{ campaign.title }}</a>
+    {% endfor %}
+</div> -->
   <div>
     {% for item in gear %}
         {% if item.acrobatics_dex or item.animal_handling_wis or item.arcana_int or item.athletics_str or item.deception_cha or item.history_int or item.insight_wis or item.intimidation_cha or item.investigation_int or item.medicine_wis or item.nature_int or item.perception_wis or item.performance_cha or item.persuasion_cha or item.religion_int or item.sleight_of_hand_dex or item.stealth_dex or item.survival_wis %}
@@ -207,11 +217,7 @@
         <p>Appearance -- {{character.appearance}}</p>
         <p> Backstory -- {{character.backstory}}</p>
         <p>Currently in a Campaign? -- {{character.current_campaign}}</p>
-        <div>
-          {% for campaign in campaigns %}
-          <a href="{% url 'add_character_to_campaign' campaign.pk %}?character_pk={{ character.pk }}&assoc=add" class="dropdown-item">{{ campaign.title }}</a>
-          {% endfor %}
-      </div>
+        
     </div>
     
 </div>
