@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from main_app.views import testFight
 
 urlpatterns = [
     path('', views.Home.as_view(), name="home"), # <- here we have added the new path
@@ -10,5 +11,6 @@ urlpatterns = [
     path('characters/<int:pk>/delete',views.CharacterDelete.as_view(), name="character_delete"),
     path('characters/<int:pk>/gear', views.GearCreate.as_view(), name="gear_create"),
     path('campaign_character_assoc/<int:campaign_pk>/add/', views.CampaignCharacterAssoc.as_view(), name='add_character_to_campaign'),
+    path('characters/add_to_campaign/', testFight, name='test_fight'),
     path('campaigns/<int:pk>/characters/<int:character_pk>/', views.CampaignCharacterAssoc.as_view(), name="campaign_character_assoc"),
 ]

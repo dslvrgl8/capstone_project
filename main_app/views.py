@@ -31,6 +31,7 @@ class Home(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["campaigns"] = Campaign.objects.all()
+        print(Character.objects.all())
 
         # Get the selected campaign if it's present in the URL parameters
         campaign_pk = self.request.GET.get("campaign")
@@ -40,7 +41,8 @@ class Home(TemplateView):
             # Get characters associated with the selected campaign
             context["characters_in_campaign"] = campaign.characters.all()
             # Get characters not associated with the selected campaign
-            context["characters_not_in_campaign"] = Character.objects.exclude(campaigns=campaign)
+            print(Character.objects.exclude(campaigns=campaign_pk))
+            context["characters_not_in_campaign"] = Character.objects.exclude(campaigns=campaign_pk)
 
         return context
 
@@ -93,6 +95,7 @@ class CharacterDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['gear'] = self.object.gears.all()
+        context['campaigns'] = Campaign.objects.all()
         context['campaign_form'] = CampaignCharacterForm()
         return context
 
@@ -134,7 +137,8 @@ class GearCreate(CreateView):
 
 class CampaignCharacterAssoc(View):
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs, ):
+        campaign = get_object_or_404(Campaign, pk=campaign_pk)
         form = CampaignCharacterForm(request.POST)
         if form.is_valid():
             character = form.cleaned_data['character']
@@ -157,3 +161,19 @@ def add_character_to_campaign(request, campaign_pk, character_pk):
     return HttpResponseRedirect(reverse('home'))
 
 
+def testFight(request):
+    if request.method == 'POST':
+
+        # here we are getting each character's id to then throw into our url
+        selected_campaign_id = request.POST.getlist('selected_campaign')
+        selected_campaign_id = selected_campaign_id[0]
+        selected_character_id = request.POST.getlist('selected_character')
+        selected_character_id = selected_character_id[0]
+        print(selected_character_id, selected_campaign_id)
+
+
+
+        # this automatically throws fight in front of the url
+        return redirect('')
+    else:
+        return HttpResponse(request.method)

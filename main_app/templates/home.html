@@ -6,10 +6,30 @@
 {% for campaign in campaigns %}
 <div class="campaign mb-5">
     <h3 class="title is-3 has-text-success">{{ campaign.title }}</h3>
+    {% for character in campaign.characters.all %}
+    <a class="card" href="{% url 'character_detail' character.pk %}">
+        <div class="card">
+            <div class="card-image">
+                <figure class="image is-square">
+                    <img src="{{character.img}}" alt="{{character.name}}"/>
+                </figure>
+            </div>
+            <div class="card-header">
+                <p class="card-header-title">{{character.name}}</p>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <article class="message">
+        <div class="message-header">
+            <p>No Characters Available</p>
+        </div>
+    </article>
+    {% endfor %}
     <hr />
     <div class="dropdown">
         <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+            <!-- <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
                 <span>Add Character</span>
                 <span class="icon is-small">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -18,11 +38,11 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-                {% for character in characters_not_in_campaign %}
-                <a href="{% url 'campaign_character_assoc' campaign.pk character.pk %}?assoc=add"
+                {% for character in campaign.characters.all %}
+                <a href="{% url 'campaign_character_assoc' campaign.pk character.pk %}"
                     class="dropdown-item">{{ character.name }} (Level {{ character.class_level }})</a>
                 {% endfor %}
-            </div>
+            </div> -->
         </div>
     </div>
     <div>

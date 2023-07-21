@@ -28,14 +28,25 @@
         </a>
     </div>
     <a class="button is-dark" href="{% url 'gear_create' character.pk %}">Add Gear</a>
-    <form method="post" action="{% url 'add_character_to_campaign' character.pk %}">
-      {% csrf_token %}
-      {{ campaign_form.as_p }}
-      <button type="submit" class="button is-success">Add Character to Campaign</button>
-  </form>
-    {% for g in gear %}
+   
+<!-- SPACE -->
+  <form class="centered" method = "post" action="{% url 'test_fight' %}">
+    {% csrf_token %}
+    <select name="selected_campaign" multiple>
+        {% for campaign in campaigns %}
 
-{% endfor %}
+            <option value="{{campaign.id}}">{{campaign.name}}</option>
+            
+        {% endfor %}
+    </select>
+    <select value=“selected_character” style='display: none;' multiple>
+      <option value=“{{character.id}}” selected></option>
+      </select>
+    <input class="margin" type="submit" value="ADD" />
+  
+
+</form>
+
       <span class="icon">
           <i class="fas fa-edit"></i>
       </span>
